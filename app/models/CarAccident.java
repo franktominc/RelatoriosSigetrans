@@ -27,6 +27,15 @@ public class CarAccident {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Vehicle> vehicles;
     private String cause;
+    private Long cod_rgo;
+
+    public Long getCod_rgo() {
+        return cod_rgo;
+    }
+
+    public void setCod_rgo(Long cod_rgo) {
+        this.cod_rgo = cod_rgo;
+    }
 
     public String getCause() {
         return cause;

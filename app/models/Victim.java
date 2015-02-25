@@ -19,6 +19,15 @@ public class Victim extends Model {
     private Integer age;
     private String hospital;
     private String severity;
+    private Long cod_vit;
+
+    public Long getCod_vit() {
+        return cod_vit;
+    }
+
+    public void setCod_vit(Long cod_vit) {
+        this.cod_vit = cod_vit;
+    }
 
     public String getSeverity() {
         return severity;
