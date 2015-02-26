@@ -4,10 +4,7 @@ package models;
 
 
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
@@ -17,9 +14,11 @@ import java.util.List;
 @Entity
 public class CarAccident {
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     private String neighborhood;
     private String street;
+    private String number;
     private String crossroad;
     private Date date;
     @OneToMany(cascade = CascadeType.ALL)
@@ -28,6 +27,14 @@ public class CarAccident {
     private List<Vehicle> vehicles;
     private String cause;
     private Long cod_rgo;
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
 
     public Long getCod_rgo() {
         return cod_rgo;
