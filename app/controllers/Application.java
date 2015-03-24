@@ -10,7 +10,7 @@ import views.html.*;
 public class Application extends Controller {
 
     public static Result index() {
-        return ok(index.render("Pronto"));
+        return ok(Test2.render());
     }
 
 
