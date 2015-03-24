@@ -1,26 +1,21 @@
 @(l : List[ReportData])
 @main("Wow"){
-    <div id="data" style="display: none;">
-        @l
+
+    <div class="container container-fluid ">
+        <table class="table-bordered table-responsive table ">
+            <tr>
+                <th>Bairro</th>
+                <th>Quantidade</th>
+            </tr>
+            @l.map{listItem =><tr>
+                <td>
+                    @listItem.getData
+                </td>
+                <td>
+                    @listItem.getQuantity
+                </td>
+            </tr> }
+        </table>
     </div>
-    <div id="piechart" style="width: 900px; height: 500px;"></div>
-
-<script type="text/javascript">
-    google.load("visualization", "1", {packages:["corechart"]});
-    alert(document.getElementById('data' ).innerHTML)
-    function drawChart() {
-
-    var data = google.visualization.arrayToDataTable(document.getElementById('data' ).innerHTML);
-    alert(data)
-
-    var options = {
-    title: 'My Daily Activities'
-    };
-
-    var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
-    chart.draw(data, options);
-    }
-</script>
 
 }
