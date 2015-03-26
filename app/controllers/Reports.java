@@ -32,9 +32,9 @@ public class Reports extends Controller{
                 "ORDER BY count(Id) DESC " +
                 "limit 10";
 
-        SqlQuery sqlQuery = Ebean.createSqlQuery(sql);
-        List<SqlRow> list = sqlQuery.findList().subList(0,10);
-        List l = find(sql);
+        String[] data = {"neighborhood","c"};
+
+        List l = find(sql,data);
         return ok(test.render(l));
     }
     public static Result neighborhoodReportByDate(){
@@ -46,21 +46,26 @@ public class Reports extends Controller{
                 dateFilter.getInitial() +
                 "' and '" + dateFilter.getDfinal() +
                 "' GROUP BY neighborhood " +
-                "ORDER BY count(Id) DESC " +
-                "limit 10";
+                "ORDER BY count(Id) DESC";
 
-        List l = find(sql);
+        String[] data = {"neighborhood","c"};
+
+
+        List l = find(sql,data);
         return ok(test.render(l));
     }
 
-    private static List find(String sql){
+    private static List find(String sql,String[] params){
+        int S = 0;
         SqlQuery sqlQuery = Ebean.createSqlQuery(sql);
         List<SqlRow> list = sqlQuery.findList();
         List<ReportData> l = new ArrayList<>();
 
         for(SqlRow s: list){
-            l.add(new ReportData(s.getString("neighborhood"), s.getInteger("c")));
+            l.add(new ReportData(s.getString(params[0]), s.getInteger(params[1])));
+            S+=s.getInteger(params[1]);
         }
+        l.add(new ReportData("Total", S));
         return l;
     }
 }
