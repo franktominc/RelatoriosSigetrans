@@ -1,0 +1,24 @@
+@(l : List[ReportData])
+
+@main("Wow"){
+    <div id="chart_div"></div>
+    <script type="text/javascript">
+    google.load('visualization', '1.0', {'packages':['corechart']});
+    google.setOnLoadCallback(drawChart);
+    function drawChart() {
+        var data = new google.visualization.Datatable();
+        data.addColumn('string', 'topping' );
+        data.addcolumn('number', 'slices');
+        data.addrows([
+            @l.map { listItem =>
+                ['@listItem.getData' , '@listItem.getQuantity'] ,
+            }
+            ]);
+
+        var options = {'title':'Wow', 'width':400, height:300};
+        var chart = newgoogle.visualization.PieChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+    }
+    </script>
+
+}

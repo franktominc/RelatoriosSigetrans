@@ -9,6 +9,7 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.test;
+import views.html.test3;
 
 
 import javax.transaction.Transactional;
@@ -35,7 +36,7 @@ public class Reports extends Controller{
         String[] data = {"neighborhood","c"};
 
         List l = find(sql,data);
-        return ok(test.render(l));
+        return ok(test3.render(l));
     }
     public static Result neighborhoodReportByDate(){
         DateFilter dateFilter = Form.form(DateFilter.class).bindFromRequest().get();
@@ -52,7 +53,7 @@ public class Reports extends Controller{
 
 
         List l = find(sql,data);
-        return ok(test.render(l));
+        return ok(test3.render(l));
     }
 
     private static List find(String sql,String[] params){
