@@ -27,6 +27,15 @@ public class CarAccident {
     private List<Vehicle> vehicles;
     private String cause;
     private Long cod_rgo;
+    private String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getNumber() {
         return number;

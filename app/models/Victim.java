@@ -20,6 +20,16 @@ public class Victim extends Model {
     private String hospital;
     private String severity;
     private Long cod_vit;
+    private String evolution;
+
+
+    public String getEvolution() {
+        return evolution;
+    }
+
+    public void setEvolution(String evolution) {
+        this.evolution = evolution;
+    }
 
     public Long getCod_vit() {
         return cod_vit;
