@@ -21,23 +21,11 @@ import java.util.*;
 public class Reports extends Controller{
     /**
      * Generate a report of the neighborhoods
-     * with most Car Accidents
+     * with most Car Accidents given a initial and a
+     * final dDate
      * @return Action Page with neighborhoods sorted
      * by Car Accidents
      */
-    public static Result neighborhoodReport(){
-
-        String sql = "select neighborhood,count(Id) as c " +
-                "from car_accident " +
-                "GROUP BY neighborhood " +
-                "ORDER BY count(Id) DESC " +
-                "limit 10";
-
-        String[] data = {"neighborhood","c"};
-
-        List l = find(sql,data);
-        return ok(test3.render(l));
-    }
     public static Result neighborhoodReportByDate(){
         DateFilter dateFilter = Form.form(DateFilter.class).bindFromRequest().get();
 
@@ -55,7 +43,22 @@ public class Reports extends Controller{
         List l = find(sql,data);
         return ok(test3.render(l));
     }
+    public static Result accidentTypeReport(){
+        DateFilter dateFilter = Form.form(DateFilter.class).bindFromRequest().get();
+        List l;
+        String sql = "select type, count(Id) as c " +
+                "from car_accident " +
+                "where date between '" +
+                dateFilter.getInitial() +
+                "' and '" + dateFilter.getDfinal() +
+                "' group by type " +
+                "order by count(Id) DESC";
 
+        String[] data = {"type","c"};
+        l=find(sql,data);
+        System.out.println(l);
+        return ok(test3.render(l));
+    }
     private static List find(String sql,String[] params){
         int S = 0;
         SqlQuery sqlQuery = Ebean.createSqlQuery(sql);
