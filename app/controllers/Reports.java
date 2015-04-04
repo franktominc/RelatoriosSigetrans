@@ -59,6 +59,20 @@ public class Reports extends Controller{
         System.out.println(l);
         return ok(test3.render(l));
     }
+    public static Result severityReport(){
+        DateFilter dateFilter = Form.form(DateFilter.class).bindFromRequest().get();
+        String sql = "SELECT severity, count(car_accident_id) as c " +
+                "from (SELECT * from car_accident " +
+                      "INNER JOIN victim on car_accident.id = victim.car_accident_id) as k " +
+                "where k.date between '" +
+                dateFilter.getInitial() +"' and '"+ dateFilter.getDfinal() +
+                "' GROUP BY severity";
+
+        String[] data = {"severity","c"};
+        List l = find(sql, data);
+        System.out.println(l);
+        return ok(test3.render(l));
+    }
     private static List find(String sql,String[] params){
         int S = 0;
         SqlQuery sqlQuery = Ebean.createSqlQuery(sql);
