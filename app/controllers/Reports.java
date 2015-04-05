@@ -73,6 +73,19 @@ public class Reports extends Controller{
         System.out.println(l);
         return ok(test3.render(l));
     }
+    public static Result streetReport(){
+        DateFilter dateFilter = Form.form(DateFilter.class).bindFromRequest().get();
+        String sql = "select street, count(id) as c " +
+                "from car_accident " +
+                "where date between '"+dateFilter.getInitial()+
+                "' and '" + dateFilter.getDfinal() +
+                "' GROUP BY street ORDER BY c DESC ";
+
+        String[] data = {"street","c"};
+        List l = find(sql, data);
+        System.out.println(l);
+        return ok(test3.render(l));
+    }
     private static List find(String sql,String[] params){
         int S = 0;
         SqlQuery sqlQuery = Ebean.createSqlQuery(sql);
