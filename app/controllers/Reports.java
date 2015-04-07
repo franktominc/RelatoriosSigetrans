@@ -8,6 +8,8 @@ import models.DateFilter;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.twirl.api.Html;
+import views.html.index;
 import views.html.test;
 import views.html.test3;
 
@@ -84,6 +86,23 @@ public class Reports extends Controller{
         String[] data = {"street","c"};
         List l = find(sql, data);
         System.out.println(l);
+        return ok(test3.render(l));
+    }
+    public static Result vehicleTypeReport(){
+        DateFilter dateFilter = Form.form(DateFilter.class).bindFromRequest().get();
+        String sql = "select vehicle2.type as t, count(id) as c "+
+                "from (SELECT vehicle.type, date, vehicle.id from vehicle INNER JOIN " +
+                "car_accident ON car_accident.id = vehicle.car_accident_id) as vehicle2 " +
+                "where date between '" + dateFilter.getInitial() +
+                "' and '" + dateFilter.getDfinal() +
+                "' group by t " +
+                "order by c DESC";
+
+        String[] data = {"t","c"};
+
+        List l = find(sql, data);
+        System.out.println(l);
+
         return ok(test3.render(l));
     }
     private static List find(String sql,String[] params){
