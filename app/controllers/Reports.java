@@ -40,11 +40,12 @@ public class Reports extends Controller{
             case "street":
                 result = streetReport(reportFilter);
                 break;
-            case "genderReport":
-                result = genderReport(reportFilter);
+            case "gender":
+                result = ageReport(reportFilter);
                 break;
+            case "age":
+                result = ageReport(reportFilter);
         }
-        System.out.println("Renderizou");
         return result;
     }
 
@@ -145,7 +146,8 @@ public class Reports extends Controller{
                 " as victim2 " +
                 "where date between '" +reportFilter.getInitial()+
                 "' and '"+ reportFilter.getDfinal()+
-                "' group by gender";
+                "' group by gender " +
+                "order by c DESC";
 
         String[] data = {"gender","c"};
 
@@ -154,6 +156,24 @@ public class Reports extends Controller{
         return ok(test3.render(l));
     }
 
+    private static Result ageReport(ReportFilter reportFilter){
+        List<ReportData> l = new ArrayList<ReportData>();
+        for (int i = 0; i <= 85; i+=5){
+
+            String sql = "select count(id) as c from " +
+                    "(select age, victim.id ,date from victim " +
+                    "INNER JOIN car_accident ON car_accident.id = victim.car_accident_id) as victims " +
+                    "where age between " + i + " and " + (i+5) +
+                    " and date between '" + reportFilter.getInitial() + "' and '" +
+                    reportFilter.getDfinal()+"'";
+            SqlQuery sqlQuery = Ebean.createSqlQuery(sql);
+            List<SqlRow> list = sqlQuery.findList();
+            if(!list.isEmpty())
+                l.add(new ReportData(i + "-" + (i+5), list.get(0).getInteger("c")));
+        }
+        System.out.println(l);
+        return ok(test3.render(l));
+    }
     private static List find(String sql,String[] params){
         int S = 0;
         SqlQuery sqlQuery = Ebean.createSqlQuery(sql);
