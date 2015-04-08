@@ -1,7 +1,10 @@
 @main("Teste"){
-    <form method="post" action="/neighborhood">
+    <form method="post" action="/report">
         <input type="date" name="initial">
         <input type="date" name="dfinal">
+        <select name="reportType">
+            <option value="genderReport">Sexo</option>
+        </select>
         <input type="submit">
     </form>
 }

@@ -4,6 +4,8 @@ package models;
 
 
 
+import play.db.ebean.Model;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -12,7 +14,7 @@ import java.util.List;
  * Created by ftominc on 12/02/15.
  */
 @Entity
-public class CarAccident {
+public class CarAccident extends Model{
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
@@ -27,6 +29,15 @@ public class CarAccident {
     private List<Vehicle> vehicles;
     private String cause;
     private Long cod_rgo;
+    private String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getNumber() {
         return number;
