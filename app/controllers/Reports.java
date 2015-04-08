@@ -47,6 +47,7 @@ public class Reports extends Controller{
         System.out.println("Renderizou");
         return result;
     }
+
     /**
      * Generate a report of the neighborhoods
      * with most Car Accidents given a initial and a
@@ -55,7 +56,6 @@ public class Reports extends Controller{
      * by Car Accidents
      */
     public static Result neighborhoodReportByDate(ReportFilter reportFilter){
-
 
         String sql = "select neighborhood,count(Id) as c " +
                 "from car_accident " +
@@ -67,13 +67,12 @@ public class Reports extends Controller{
 
         String[] data = {"neighborhood","c"};
 
-
         List l = find(sql,data);
         return ok(test3.render(l));
     }
+
     public static Result accidentTypeReport(ReportFilter reportFilter){
 
-        List l;
         String sql = "select type, count(Id) as c " +
                 "from car_accident " +
                 "where date between '" +
@@ -83,10 +82,12 @@ public class Reports extends Controller{
                 "order by count(Id) DESC";
 
         String[] data = {"type","c"};
-        l=find(sql,data);
-        System.out.println(l);
+
+        List l=find(sql,data);
+
         return ok(test3.render(l));
     }
+
     public static Result severityReport(ReportFilter reportFilter){
 
         String sql = "SELECT severity, count(car_accident_id) as c " +
@@ -97,10 +98,12 @@ public class Reports extends Controller{
                 "' GROUP BY severity";
 
         String[] data = {"severity","c"};
+
         List l = find(sql, data);
-        System.out.println(l);
+
         return ok(test3.render(l));
     }
+
     public static Result streetReport(ReportFilter reportFilter){
 
         String sql = "select street, count(id) as c " +
@@ -110,15 +113,17 @@ public class Reports extends Controller{
                 "' GROUP BY street ORDER BY c DESC ";
 
         String[] data = {"street","c"};
+
         List l = find(sql, data);
-        System.out.println(l);
+
         return ok(test3.render(l));
     }
+
     public static Result vehicleTypeReport(ReportFilter reportFilter){
 
         String sql = "select vehicle2.type as t, count(id) as c "+
                 "from (SELECT vehicle.type, date, vehicle.id from vehicle INNER JOIN " +
-                "car_accident ON car_accident.id = vehicle.car_accident_id) as vehicle2 " +
+                       "car_accident ON car_accident.id = vehicle.car_accident_id) as vehicle2 " +
                 "where date between '" + reportFilter.getInitial() +
                 "' and '" + reportFilter.getDfinal() +
                 "' group by t " +
@@ -127,23 +132,25 @@ public class Reports extends Controller{
         String[] data = {"t","c"};
 
         List l = find(sql, data);
-        System.out.println(l);
 
         return ok(test3.render(l));
     }
+
     private static Result genderReport(ReportFilter reportFilter){
 
         String sql = "select count(id) as c, gender " +
                 "from (SELECT victim.id, gender, date " +
-                "      from victim INNER JOIN car_accident ON car_accident.id = victim.car_accident_id)" +
+                "      from victim INNER JOIN car_accident ON " +
+                "     car_accident.id = victim.car_accident_id)" +
                 " as victim2 " +
                 "where date between '" +reportFilter.getInitial()+
                 "' and '"+ reportFilter.getDfinal()+
                 "' group by gender";
 
         String[] data = {"gender","c"};
+
         List l = find(sql, data);
-        System.out.println(l);
+
         return ok(test3.render(l));
     }
 
