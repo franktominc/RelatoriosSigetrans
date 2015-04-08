@@ -5,9 +5,18 @@ import java.util.Date;
 /**
  * Created by ftominc on 24/03/15.
  */
-public class DateFilter {
+public class ReportFilter {
     Date initial;
     Date dfinal;
+    String reportType;
+
+    public String getReportType() {
+        return reportType;
+    }
+
+    public void setReportType(String reportType) {
+        this.reportType = reportType;
+    }
 
     public Date getInitial() {
         return initial;
