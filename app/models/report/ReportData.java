@@ -1,4 +1,4 @@
-package models;
+package models.report;
 
 /**
  * Created by ftominc on 19/03/15.

@@ -3,12 +3,12 @@ package controllers;
 import com.avaje.ebean.*;
 
 
-import models.*;
-import models.ReportFilter;
+import models.report.ReportData;
+import models.report.ReportFilter;
+import models.report.ReportVictim;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-import play.twirl.api.Html;
 import views.html.index;
 import views.html.test3;
 
@@ -41,10 +41,18 @@ public class Reports extends Controller{
                 result = streetReport(reportFilter);
                 break;
             case "gender":
-                result = ageReport(reportFilter);
+                result = genderReport(reportFilter);
                 break;
             case "age":
                 result = ageReport(reportFilter);
+                break;
+            case "deceased":
+                result = victimStateReport(reportFilter,"'Óbito'");
+                break;
+            case "badHurted":
+                result = victimStateReport(reportFilter,
+                        "'Ferimentos considerados graves com risco à vida'");
+                break;
         }
         return result;
     }
@@ -56,7 +64,7 @@ public class Reports extends Controller{
      * @return Action Page with neighborhoods sorted
      * by Car Accidents
      */
-    public static Result neighborhoodReportByDate(ReportFilter reportFilter){
+    private static Result neighborhoodReportByDate(ReportFilter reportFilter){
 
         String sql = "select neighborhood,count(Id) as c " +
                 "from car_accident " +
@@ -72,7 +80,7 @@ public class Reports extends Controller{
         return ok(test3.render(l));
     }
 
-    public static Result accidentTypeReport(ReportFilter reportFilter){
+    private static Result accidentTypeReport(ReportFilter reportFilter){
 
         String sql = "select type, count(Id) as c " +
                 "from car_accident " +
@@ -89,7 +97,7 @@ public class Reports extends Controller{
         return ok(test3.render(l));
     }
 
-    public static Result severityReport(ReportFilter reportFilter){
+    private static Result severityReport(ReportFilter reportFilter){
 
         String sql = "SELECT severity, count(car_accident_id) as c " +
                 "from (SELECT * from car_accident " +
@@ -105,7 +113,7 @@ public class Reports extends Controller{
         return ok(test3.render(l));
     }
 
-    public static Result streetReport(ReportFilter reportFilter){
+    private static Result streetReport(ReportFilter reportFilter){
 
         String sql = "select street, count(id) as c " +
                 "from car_accident " +
@@ -120,7 +128,7 @@ public class Reports extends Controller{
         return ok(test3.render(l));
     }
 
-    public static Result vehicleTypeReport(ReportFilter reportFilter){
+    private static Result vehicleTypeReport(ReportFilter reportFilter){
 
         String sql = "select vehicle2.type as t, count(id) as c "+
                 "from (SELECT vehicle.type, date, vehicle.id from vehicle INNER JOIN " +
@@ -157,7 +165,9 @@ public class Reports extends Controller{
     }
 
     private static Result ageReport(ReportFilter reportFilter){
+
         List<ReportData> l = new ArrayList<ReportData>();
+
         for (int i = 0; i <= 85; i+=5){
 
             String sql = "select count(id) as c from " +
@@ -171,9 +181,33 @@ public class Reports extends Controller{
             if(!list.isEmpty())
                 l.add(new ReportData(i + "-" + (i+5), list.get(0).getInteger("c")));
         }
-        System.out.println(l);
         return ok(test3.render(l));
     }
+
+    private static Result victimStateReport(ReportFilter reportFilter, String state){
+
+        String sql = "select victim.name as name, age, hospital, date " +
+                "from victim " +
+                "INNER JOIN car_accident ON car_accident.id = victim.car_accident_id " +
+                "where victim.severity like " + state + " ORDER BY date desc";
+
+        SqlQuery sqlQuery = Ebean.createSqlQuery(sql);
+
+        List<SqlRow> list = sqlQuery.findList();
+
+        List<ReportVictim> l = new ArrayList<>();
+
+        for (SqlRow s : list){
+            l.add(new ReportVictim(s.getString("name"),
+                                    s.getInteger("age"),
+                                    s.getString("hospital"),
+                                    s.getDate("date")));
+        }
+
+        System.out.println(l);
+        return ok(index.render(""));
+    }
+
     private static List find(String sql,String[] params){
         int S = 0;
         SqlQuery sqlQuery = Ebean.createSqlQuery(sql);
