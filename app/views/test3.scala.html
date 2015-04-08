@@ -1,24 +1,27 @@
 @(l : List[ReportData])
+@import play.libs.Json;
 
 @main("Wow"){
-    <div id="chart_div"></div>
-    <script type="text/javascript">
-    google.load('visualization', '1.0', {'packages':['corechart']});
-    google.setOnLoadCallback(drawChart);
-    function drawChart() {
-        var data = new google.visualization.Datatable();
-        data.addColumn('string', 'topping' );
-        data.addcolumn('number', 'slices');
-        data.addrows([
-            @l.map { listItem =>
-                ['@listItem.getData' , '@listItem.getQuantity'] ,
-            }
-            ]);
+    <div id="chart_div" class = "row"></div>
+        <script type="text/javascript">
+        google.load('visualization', '1.0', {'packages':['corechart', 'controls']});
+        google.setOnLoadCallback(drawChart);
+        function drawChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Topping');
+        data.addColumn('number', 'Slices');
+        data.addRows([
 
-        var options = {'title':'Wow', 'width':400, height:300};
-        var chart = newgoogle.visualization.PieChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
-    }
-    </script>
+            @l.take(l.size()-1).map{listItem =>
 
+                ['@listItem.getData', @listItem.getQuantity],
+
+             }
+        ]);
+
+            var options = {'title':'Ocorrências'};
+            var chart = new google.visualization.PieChart ( document.getElementById ( 'chart_div' ) ) ;
+            chart.draw(data, options);
+        }
+        </script>
 }
