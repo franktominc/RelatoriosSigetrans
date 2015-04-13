@@ -189,7 +189,9 @@ public class Reports extends Controller{
         String sql = "select victim.name as name, age, hospital, date " +
                 "from victim " +
                 "INNER JOIN car_accident ON car_accident.id = victim.car_accident_id " +
-                "where victim.severity like " + state + " ORDER BY date desc";
+                "where victim.severity like " + state + " and date between '" +
+                reportFilter.getInitial() +"' and '" + reportFilter.getDfinal()+
+                "' ORDER BY date desc";
 
         SqlQuery sqlQuery = Ebean.createSqlQuery(sql);
 
