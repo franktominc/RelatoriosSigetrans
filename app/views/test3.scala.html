@@ -2,7 +2,12 @@
 @import play.libs.Json;
 
 @main("Wow"){
-    <div id="chart_div" class = "row"></div>
+    <style>
+        #chart_div{
+            height: 80%;
+        }
+    </style>
+    <div id="chart_div" class = "row" ></div>
         <script type="text/javascript">
         google.load('visualization', '1.0', {'packages':['corechart', 'controls']});
         google.setOnLoadCallback(drawChart);
@@ -19,9 +24,25 @@
              }
         ]);
 
-            var options = {'title':'Ocorrências'};
+            var options = {'title':'Ocorrências','height':500, pieHole: 0.4};
             var chart = new google.visualization.PieChart ( document.getElementById ( 'chart_div' ) ) ;
             chart.draw(data, options);
         }
         </script>
+    <div class="container container-fluid ">
+        <table class="table-bordered table-responsive table ">
+            <tr>
+                <th>Bairro</th>
+                <th>Quantidade</th>
+            </tr>
+            @l.map{listItem =><tr>
+                <td>
+                    @listItem.getData
+                </td>
+                <td>
+                @listItem.getQuantity
+                </td>
+            </tr> }
+        </table>
+    </div>
 }
