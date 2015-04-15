@@ -10,7 +10,7 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.index;
-import views.html.report;
+import views.html.test3;
 
 
 import java.util.*;
@@ -77,7 +77,7 @@ public class Reports extends Controller{
         String[] data = {"neighborhood","c"};
 
         List l = find(sql,data);
-        return ok(report.render(l));
+        return ok(test3.render(l));
     }
 
     private static Result accidentTypeReport(ReportFilter reportFilter){
@@ -94,7 +94,7 @@ public class Reports extends Controller{
 
         List l=find(sql,data);
 
-        return ok(report.render(l));
+        return ok(test3.render(l));
     }
 
     private static Result severityReport(ReportFilter reportFilter){
@@ -110,7 +110,7 @@ public class Reports extends Controller{
 
         List l = find(sql, data);
 
-        return ok(report.render(l));
+        return ok(test3.render(l));
     }
 
     private static Result streetReport(ReportFilter reportFilter){
@@ -125,7 +125,7 @@ public class Reports extends Controller{
 
         List l = find(sql, data);
 
-        return ok(report.render(l));
+        return ok(test3.render(l));
     }
 
     private static Result vehicleTypeReport(ReportFilter reportFilter){
@@ -142,7 +142,7 @@ public class Reports extends Controller{
 
         List l = find(sql, data);
 
-        return ok(report.render(l));
+        return ok(test3.render(l));
     }
 
     private static Result genderReport(ReportFilter reportFilter){
@@ -161,53 +161,7 @@ public class Reports extends Controller{
 
         List l = find(sql, data);
 
-        return ok(report.render(l));
-    }
-
-    private static Result ageReport(ReportFilter reportFilter){
-
-        List<ReportData> l = new ArrayList<ReportData>();
-
-        for (int i = 0; i <= 85; i+=5){
-
-            String sql = "select count(id) as c from " +
-                    "(select age, victim.id ,date from victim " +
-                    "INNER JOIN car_accident ON car_accident.id = victim.car_accident_id) as victims " +
-                    "where age between " + i + " and " + (i+5) +
-                    " and date between '" + reportFilter.getInitial() + "' and '" +
-                    reportFilter.getDfinal()+"'";
-            SqlQuery sqlQuery = Ebean.createSqlQuery(sql);
-            List<SqlRow> list = sqlQuery.findList();
-            if(!list.isEmpty())
-                l.add(new ReportData(i + "-" + (i+5), list.get(0).getInteger("c")));
-        }
-        return ok(report.render(l));
-    }
-
-    private static Result victimStateReport(ReportFilter reportFilter, String state){
-
-        String sql = "select victim.name as name, age, hospital, date " +
-                "from victim " +
-                "INNER JOIN car_accident ON car_accident.id = victim.car_accident_id " +
-                "where victim.severity like " + state + " and date between '" +
-                reportFilter.getInitial() +"' and '" + reportFilter.getDfinal()+
-                "' ORDER BY date desc";
-
-        SqlQuery sqlQuery = Ebean.createSqlQuery(sql);
-
-        List<SqlRow> list = sqlQuery.findList();
-
-        List<ReportVictim> l = new ArrayList<>();
-
-        for (SqlRow s : list){
-            l.add(new ReportVictim(s.getString("name"),
-                                    s.getInteger("age"),
-                                    s.getString("hospital"),
-                                    s.getDate("date")));
-        }
-
-        System.out.println(l);
-        return ok(index.render(""));
+        return ok(test3.render(l));
     }
 
     private static Result ageReport(ReportFilter reportFilter){
