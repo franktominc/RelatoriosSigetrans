@@ -1,9 +1,9 @@
 @import models.report.ReportData
 
-@(l : List[ReportData])
+@(l : List[ReportData],r :String)
 @import play.libs.Json;
 
-@main("Wow"){
+@main(r){
     <style>
         #chart_div{
             height: 80%;
@@ -26,7 +26,7 @@
              }
         ]);
 
-            var options = {'title':'Ocorrências','height':500, pieHole: 0.4
+            var options = {'title':"@r",'height':500, pieHole: 0.4
             ,'sliceVisibilityThreshold':7/1000};
             var chart = new google.visualization.PieChart ( document.getElementById ( 'chart_div' ) ) ;
             chart.draw(data, options);

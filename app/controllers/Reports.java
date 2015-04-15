@@ -77,7 +77,7 @@ public class Reports extends Controller{
         String[] data = {"neighborhood","c"};
 
         List l = find(sql,data);
-        return ok(test3.render(l));
+        return ok(test3.render(l,"Acidentes por bairro"));
     }
 
     private static Result accidentTypeReport(ReportFilter reportFilter){
@@ -94,7 +94,7 @@ public class Reports extends Controller{
 
         List l=find(sql,data);
 
-        return ok(test3.render(l));
+        return ok(test3.render(l, "Acidentes por Tipo"));
     }
 
     private static Result severityReport(ReportFilter reportFilter){
@@ -110,7 +110,7 @@ public class Reports extends Controller{
 
         List l = find(sql, data);
 
-        return ok(test3.render(l));
+        return ok(test3.render(l,"Acidentes por Severidade"));
     }
 
     private static Result streetReport(ReportFilter reportFilter){
@@ -125,7 +125,7 @@ public class Reports extends Controller{
 
         List l = find(sql, data);
 
-        return ok(test3.render(l));
+        return ok(test3.render(l, "Acidentes por rua"));
     }
 
     private static Result vehicleTypeReport(ReportFilter reportFilter){
@@ -142,7 +142,7 @@ public class Reports extends Controller{
 
         List l = find(sql, data);
 
-        return ok(test3.render(l));
+        return ok(test3.render(l, "Acidentes por tipo do veiculo"));
     }
 
     private static Result genderReport(ReportFilter reportFilter){
@@ -161,7 +161,7 @@ public class Reports extends Controller{
 
         List l = find(sql, data);
 
-        return ok(test3.render(l));
+        return ok(test3.render(l, "Acidentes por Sexo"));
     }
 
     private static Result ageReport(ReportFilter reportFilter){
@@ -181,7 +181,7 @@ public class Reports extends Controller{
             if(!list.isEmpty())
                 l.add(new ReportData(i + "-" + (i+5), list.get(0).getInteger("c")));
         }
-        return ok(test3.render(l));
+        return ok(test3.render(l,"Acidentes por Idade"));
     }
 
     private static Result victimStateReport(ReportFilter reportFilter, String state){
