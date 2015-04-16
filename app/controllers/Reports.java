@@ -23,6 +23,7 @@ public class Reports extends Controller{
     public static Result processRequest(){
         ReportFilter reportFilter = Form.form(ReportFilter.class).bindFromRequest().get();
         Result result=TODO;
+        reportFilter.getDfinal().setTime(reportFilter.getDfinal().getTime()+(1000*60*60*24)-1000);
         System.out.println(reportFilter.getReportType());
         switch (reportFilter.getReportType()){
             case "neighborhood":
