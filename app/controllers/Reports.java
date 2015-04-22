@@ -9,8 +9,13 @@ import models.report.ReportVictim;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.twirl.api.Html;
+import views.html.Test2;
 import views.html.index;
+import views.html.report;
 import views.html.test3;
+
+import it.innove.play.pdf.PdfGenerator;
 
 
 import java.util.*;
@@ -26,25 +31,25 @@ public class Reports extends Controller{
         System.out.println(reportFilter.getReportType());
         switch (reportFilter.getReportType()){
             case "neighborhood":
-                result = neighborhoodReportByDate(reportFilter);
+                result = ok(neighborhoodReportByDate(reportFilter));
                 break;
             case "accidentType":
-                result = accidentTypeReport(reportFilter);
+                result = ok(accidentTypeReport(reportFilter));
                 break;
             case "severity":
-                result = severityReport(reportFilter);
+                result = ok(severityReport(reportFilter));
                 break;
             case "vehicleType":
-                result = vehicleTypeReport(reportFilter);
+                result = ok(vehicleTypeReport(reportFilter));
                 break;
             case "street":
-                result = streetReport(reportFilter);
+                result = ok(streetReport(reportFilter));
                 break;
             case "gender":
-                result = genderReport(reportFilter);
+                result = ok(genderReport(reportFilter));
                 break;
             case "age":
-                result = ageReport(reportFilter);
+                result = ok(ageReport(reportFilter));
                 break;
             case "deceased":
                 result = victimStateReport(reportFilter,"'Óbito'");
@@ -64,7 +69,7 @@ public class Reports extends Controller{
      * @return Action Page with neighborhoods sorted
      * by Car Accidents
      */
-    private static Result neighborhoodReportByDate(ReportFilter reportFilter){
+    private static Html neighborhoodReportByDate(ReportFilter reportFilter){
 
         String sql = "select neighborhood,count(Id) as c " +
                 "from car_accident " +
@@ -77,10 +82,10 @@ public class Reports extends Controller{
         String[] data = {"neighborhood","c"};
 
         List l = find(sql,data);
-        return ok(test3.render(l));
+        return test3.render(l, reportFilter);
     }
 
-    private static Result accidentTypeReport(ReportFilter reportFilter){
+    private static Html accidentTypeReport(ReportFilter reportFilter){
 
         String sql = "select type, count(Id) as c " +
                 "from car_accident " +
@@ -94,10 +99,10 @@ public class Reports extends Controller{
 
         List l=find(sql,data);
 
-        return ok(test3.render(l));
+        return (test3.render(l,reportFilter));
     }
 
-    private static Result severityReport(ReportFilter reportFilter){
+    private static Html severityReport(ReportFilter reportFilter){
 
         String sql = "SELECT severity, count(car_accident_id) as c " +
                 "from (SELECT * from car_accident " +
@@ -110,10 +115,10 @@ public class Reports extends Controller{
 
         List l = find(sql, data);
 
-        return ok(test3.render(l));
+        return (test3.render(l,reportFilter));
     }
 
-    private static Result streetReport(ReportFilter reportFilter){
+    private static Html streetReport(ReportFilter reportFilter){
 
         String sql = "select street, count(id) as c " +
                 "from car_accident " +
@@ -125,10 +130,10 @@ public class Reports extends Controller{
 
         List l = find(sql, data);
 
-        return ok(test3.render(l));
+        return (test3.render(l,reportFilter));
     }
 
-    private static Result vehicleTypeReport(ReportFilter reportFilter){
+    private static Html vehicleTypeReport(ReportFilter reportFilter){
 
         String sql = "select vehicle2.type as t, count(id) as c "+
                 "from (SELECT vehicle.type, date, vehicle.id from vehicle INNER JOIN " +
@@ -142,10 +147,10 @@ public class Reports extends Controller{
 
         List l = find(sql, data);
 
-        return ok(test3.render(l));
+        return (test3.render(l,reportFilter));
     }
 
-    private static Result genderReport(ReportFilter reportFilter){
+    private static Html genderReport(ReportFilter reportFilter){
 
         String sql = "select count(id) as c, gender " +
                 "from (SELECT victim.id, gender, date " +
@@ -161,10 +166,10 @@ public class Reports extends Controller{
 
         List l = find(sql, data);
 
-        return ok(test3.render(l));
+        return (test3.render(l,reportFilter));
     }
 
-    private static Result ageReport(ReportFilter reportFilter){
+    private static Html ageReport(ReportFilter reportFilter){
 
         List<ReportData> l = new ArrayList<ReportData>();
 
@@ -181,7 +186,7 @@ public class Reports extends Controller{
             if(!list.isEmpty())
                 l.add(new ReportData(i + "-" + (i+5), list.get(0).getInteger("c")));
         }
-        return ok(test3.render(l));
+        return (test3.render(l,reportFilter));
     }
 
     private static Result victimStateReport(ReportFilter reportFilter, String state){
@@ -222,5 +227,37 @@ public class Reports extends Controller{
         }
         l.add(new ReportData("Total", S));
         return l;
+    }
+
+    public static Result PDF(){
+
+        ReportFilter reportFilter = Form.form(ReportFilter.class).bindFromRequest().get();
+        Html result = Test2.render();
+        switch (reportFilter.getReportType()){
+
+                case "neighborhood":
+                    result = neighborhoodReportByDate(reportFilter);
+                    break;
+                case "accidentType":
+                    result = accidentTypeReport(reportFilter);
+                    break;
+                case "severity":
+                    result = severityReport(reportFilter);
+                    break;
+                case "vehicleType":
+                    result = vehicleTypeReport(reportFilter);
+                    break;
+                case "street":
+                    result = streetReport(reportFilter);
+                    break;
+                case "gender":
+                    result = genderReport(reportFilter);
+                    break;
+                case "age":
+                    result = ageReport(reportFilter);
+                    break;
+            }
+
+        return PdfGenerator.ok(result , "http://localhost:9000");
     }
 }

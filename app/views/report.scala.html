@@ -1,18 +1,13 @@
-@import models.report.ReportFilter
-
 @import models.report.ReportData
 
-@(l : List[ReportData], reportfilter : ReportFilter)
+@(l : List[ReportData])
 @import play.libs.Json;
-
-@main("Wow"){
-    <style>
-        #chart_div{
-            height: 80%;
-        }
-    </style>
+<html>
+    <meta charset="utf-8">
+    <head></head>
+    <body>
     <div id="chart_div" class = "row" ></div>
-        <script type="text/javascript">
+    <script type="text/javascript">
         google.load('visualization', '1.0', {'packages':['corechart', 'controls']});
         google.setOnLoadCallback(drawChart);
         function drawChart() {
@@ -34,8 +29,8 @@
             chart.draw(data, options);
         }
         </script>
-    <div class="container container-fluid ">
-        <table class="table-bordered table-responsive table ">
+    <div class="container container-fluid " align="center">
+        <table BORDER="2px ">
             <tr>
                 <th>Bairro</th>
                 <th>Quantidade</th>
@@ -50,11 +45,5 @@
             </tr> }
         </table>
     </div>
-    <form method="post" action="/file">
-        <input type="hidden" name="initial" value="@reportfilter.getInitial()">
-        <input type="hidden" name="dfinal" value="@reportfilter.getDfinal">
-        <input type="hidden"  name="reportType" value="@reportfilter.getReportType">
-        <input type="submit">
-    </form>
-
-}
+    </body>
+</html>
