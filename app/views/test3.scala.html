@@ -10,7 +10,8 @@
         }
     </style>
     <div id="chart_div" class = "row" ></div>
-        <script type="text/javascript">
+    <div id="chart_img"></div>
+    <script type="text/javascript">
         google.load('visualization', '1.0', {'packages':['corechart', 'controls']});
         google.setOnLoadCallback(drawChart);
         function drawChart() {
@@ -31,11 +32,11 @@
             var chart = new google.visualization.PieChart ( document.getElementById ( 'chart_div' ) ) ;
             chart.draw(data, options);
         }
-        </script>
+    </script>
     <div class="container container-fluid ">
         <table class="table-bordered table-responsive table ">
             <tr>
-                <th>Bairro</th>
+                <th>Campo</th>
                 <th>Quantidade</th>
             </tr>
             @l.map{listItem =><tr>
