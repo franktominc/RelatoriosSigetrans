@@ -1,10 +1,26 @@
 @main("Teste"){
     <form method="post" action="/report">
-        <input type="date" name="initial">
-        <input type="date" name="dfinal">
-        <select name="reportType">
-            <option value="gender">Sexo</option>
-        </select>
-        <input type="submit">
+        <div class="row">
+            <label class="col-lg-3">Data Inicial</label>
+            <input type="date" class="col-lg-3 input-sm" name="initial" required>
+        </div>
+        <div class="row row-offcanvas">
+            <label class="col-lg-3">Data Final</label>
+            <input type="date" name="dfinal" class="col-lg-3 input-sm" required>
+        </div>
+        <div class="row">
+            <label class="col-lg-3">Tipo do Relatorio</label>
+            <select name="reportType" class="input-sm col-lg-3" required>
+                <option value="neighborhood">Por Bairro</option>
+                <option value="age">Por Idade</option>
+                <option value="street">Por Rua</option>
+                <option value="severity">Por Severidade</option>
+                <option value="gender">Por Sexo</option>
+                <option value="accidentType">Por Tipo do Acidente</option>
+                <option value="vehicleType">Por Tipo de Veiculo</option>
+
+            </select>
+        </div>
+        <input type="submit" value="Gerar">
     </form>
 }

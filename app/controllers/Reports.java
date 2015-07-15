@@ -12,10 +12,7 @@ import play.mvc.Result;
 import play.twirl.api.Html;
 import views.html.Test2;
 import views.html.index;
-import views.html.report;
 import views.html.test3;
-
-import it.innove.play.pdf.PdfGenerator;
 
 
 import java.util.*;
@@ -28,6 +25,7 @@ public class Reports extends Controller{
     public static Result processRequest(){
         ReportFilter reportFilter = Form.form(ReportFilter.class).bindFromRequest().get();
         Result result=TODO;
+        reportFilter.getDfinal().setTime(reportFilter.getDfinal().getTime()+(1000*60*60*24)-1000);
         System.out.println(reportFilter.getReportType());
         switch (reportFilter.getReportType()){
             case "neighborhood":
@@ -115,7 +113,7 @@ public class Reports extends Controller{
 
         List l = find(sql, data);
 
-        return (test3.render(l,reportFilter));
+        return ok(test3.render(l));
     }
 
     private static Html streetReport(ReportFilter reportFilter){
@@ -130,7 +128,7 @@ public class Reports extends Controller{
 
         List l = find(sql, data);
 
-        return (test3.render(l,reportFilter));
+        return ok(test3.render(l));
     }
 
     private static Html vehicleTypeReport(ReportFilter reportFilter){
@@ -147,7 +145,7 @@ public class Reports extends Controller{
 
         List l = find(sql, data);
 
-        return (test3.render(l,reportFilter));
+        return ok(test3.render(l));
     }
 
     private static Html genderReport(ReportFilter reportFilter){
@@ -166,7 +164,7 @@ public class Reports extends Controller{
 
         List l = find(sql, data);
 
-        return (test3.render(l,reportFilter));
+        return ok(test3.render(l));
     }
 
     private static Html ageReport(ReportFilter reportFilter){
@@ -186,7 +184,7 @@ public class Reports extends Controller{
             if(!list.isEmpty())
                 l.add(new ReportData(i + "-" + (i+5), list.get(0).getInteger("c")));
         }
-        return (test3.render(l,reportFilter));
+        return ok(test3.render(l));
     }
 
     private static Result victimStateReport(ReportFilter reportFilter, String state){
@@ -227,37 +225,5 @@ public class Reports extends Controller{
         }
         l.add(new ReportData("Total", S));
         return l;
-    }
-
-    public static Result PDF(){
-
-        ReportFilter reportFilter = Form.form(ReportFilter.class).bindFromRequest().get();
-        Html result = Test2.render();
-        switch (reportFilter.getReportType()){
-
-                case "neighborhood":
-                    result = neighborhoodReportByDate(reportFilter);
-                    break;
-                case "accidentType":
-                    result = accidentTypeReport(reportFilter);
-                    break;
-                case "severity":
-                    result = severityReport(reportFilter);
-                    break;
-                case "vehicleType":
-                    result = vehicleTypeReport(reportFilter);
-                    break;
-                case "street":
-                    result = streetReport(reportFilter);
-                    break;
-                case "gender":
-                    result = genderReport(reportFilter);
-                    break;
-                case "age":
-                    result = ageReport(reportFilter);
-                    break;
-            }
-
-        return PdfGenerator.ok(result , "http://localhost:9000");
     }
 }
