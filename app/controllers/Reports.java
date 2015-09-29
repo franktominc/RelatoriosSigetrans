@@ -9,6 +9,7 @@ import models.report.ReportVictim;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import views.html.hue;
 import views.html.index;
 import views.html.test3;
 
@@ -223,5 +224,19 @@ public class Reports extends Controller{
         }
         l.add(new ReportData("Total", S));
         return l;
+    }
+    public static Result hue(){
+        String sql = "select neighborhood,count(Id) as c " +
+                "from car_accident " +
+
+
+                " GROUP BY neighborhood " +
+                "ORDER BY count(Id) DESC";
+
+        String[] data = {"neighborhood","c"};
+
+        List l = find(sql,data);
+
+        return ok(hue.render(l));
     }
 }

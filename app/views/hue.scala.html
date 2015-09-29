@@ -1,0 +1,121 @@
+@import models.report.ReportData
+
+@(l: List[ReportData])
+@import play.libs.Json;
+
+<!--[if lt IE 9]>
+			<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+<link rel="shortcut icon" href="@routes.Assets.at("images/favicon.png")">
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+<script src="@routes.Assets.at("javascripts/scripts.js")"></script>
+
+<script src="@routes.Assets.at("javascripts/bootstraphue.js")"></script>
+<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.css")">
+<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/styles.css")">
+
+
+<style type="text/css">
+
+#chart_div {
+height : 100 % ;
+}
+
+table {
+page-break-inside:auto !important;
+border:solid #000 !important;
+border-width:1px 0 0 1px !important;
+margin: 5px !important;
+width:100% !important;
+
+}
+tr    {
+    page-break-inside:avoid; page-break-after:always !important;
+}
+thead {
+    display:table-header-group;
+}
+tfoot {
+    display:table-footer-group;
+}
+th, td{ border:solid #000 !important;
+        border-width:0 1px 1px 0 !important;
+        border-collapse:collapse;
+        border: 1px solid black;
+        width:50%;
+        text-align:center !important;
+}
+
+</style>
+
+<div id="chart_div" class = "row" ></div>
+<div id="chart_img"></div>
+<script type="text/javascript">
+$ ( function ( ) {
+    $ ( "#print-button" ).on ( "click", function ( ) {
+    var table = $ ( "#table1" ),
+    tableWidth = table.outerWidth ( ),
+    pageWidth = 100%,
+    pageCount = Math.ceil ( tableWidth / pageWidth ),
+    printWrap = $ ( "<div></div>" ).insertAfter ( table ), i, printPage ;
+    for ( i = 0 ; i < pageCount ; i ++ ) {
+        printPage = $ ( "<div></div>" ).css ( {
+            "overflow" : "hidden",
+            "width" : pageWidth,
+            "page-break-inside" : "auto"
+        } ).appendTo ( printWrap ) ;
+        table.clone ( ).removeAttr ( "id" ).appendTo ( printPage ).css ( {
+            "position" : "relative",
+            "left" : - i * pageWidth
+        } ) ;
+    }
+    table.hide ( ) ;
+    $ ( this ).prop ( "disabled", true ) ;
+    } ) ;
+} ) ;
+
+</script>
+<script type="text/javascript">
+google.load ( 'visualization', '1.0', { 'packages' :[ 'corechart', 'controls' ] } ) ;
+google.setOnLoadCallback ( drawChart ) ;
+function drawChart ( ) {
+var data = new google.visualization.DataTable ( ) ;
+data.addColumn ( 'string', 'Topping' ) ;
+data.addColumn ( 'number', 'Slices' ) ;
+data.addRows ([
+
+    @l.take(l.size() - 1).map { listItem =>
+
+    [ ' @listItem.getData ',  @listItem.getQuantity ],
+
+    }
+] ) ;
+
+var options = { 'title' : "", 'height' : 600, pieHole : 0.4
+, 'sliceVisibilityThreshold' : 9 / 1000 } ;
+var chart = new google.visualization.PieChart ( document.getElementById ( 'chart_div' ) ) ;
+chart.draw ( data, options ) ;
+}
+</script>
+
+<div class="container container-fluid table">
+    <table id ="table1" class=" table " >
+        <tr>
+            <th>Campo</th>
+            <th>Quantidade</th>
+        </tr>
+        @l.map { listItem => <tr>
+            <td>
+                @listItem.getData
+            </td>
+            <td>
+            @listItem.getQuantity
+            </td>
+        </tr>
+        }
+    </table>
+</div>
+<div class="container container-fluid ">
+    <button type="button" id="print-button">Faça a magia acontecer</button>
+</div>

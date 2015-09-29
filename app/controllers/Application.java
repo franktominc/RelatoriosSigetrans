@@ -7,6 +7,8 @@ import play.mvc.*;
 
 import views.html.*;
 
+import static views.html.hue.*;
+
 public class Application extends Controller {
 
     public static Result index() {
