@@ -5,7 +5,6 @@
 # Home page
 GET         /                    controllers.Application.index()
 POST        /report              controllers.Reports.processRequest()
-POST        /file                controllers.Reports.PDF()
 
 
 # Map static resources from the /public   folder to the /assets URL path

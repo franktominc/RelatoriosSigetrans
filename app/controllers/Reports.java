@@ -9,8 +9,6 @@ import models.report.ReportVictim;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-import play.twirl.api.Html;
-import views.html.Test2;
 import views.html.index;
 import views.html.test3;
 
@@ -29,25 +27,25 @@ public class Reports extends Controller{
         System.out.println(reportFilter.getReportType());
         switch (reportFilter.getReportType()){
             case "neighborhood":
-                result = ok(neighborhoodReportByDate(reportFilter));
+                result = neighborhoodReportByDate(reportFilter);
                 break;
             case "accidentType":
-                result = ok(accidentTypeReport(reportFilter));
+                result = accidentTypeReport(reportFilter);
                 break;
             case "severity":
-                result = ok(severityReport(reportFilter));
+                result = severityReport(reportFilter);
                 break;
             case "vehicleType":
-                result = ok(vehicleTypeReport(reportFilter));
+                result = vehicleTypeReport(reportFilter);
                 break;
             case "street":
-                result = ok(streetReport(reportFilter));
+                result = streetReport(reportFilter);
                 break;
             case "gender":
-                result = ok(genderReport(reportFilter));
+                result = genderReport(reportFilter);
                 break;
             case "age":
-                result = ok(ageReport(reportFilter));
+                result = ageReport(reportFilter);
                 break;
             case "deceased":
                 result = victimStateReport(reportFilter,"'Óbito'");
@@ -67,7 +65,7 @@ public class Reports extends Controller{
      * @return Action Page with neighborhoods sorted
      * by Car Accidents
      */
-    private static Html neighborhoodReportByDate(ReportFilter reportFilter){
+    private static Result neighborhoodReportByDate(ReportFilter reportFilter){
 
         String sql = "select neighborhood,count(Id) as c " +
                 "from car_accident " +
@@ -80,10 +78,10 @@ public class Reports extends Controller{
         String[] data = {"neighborhood","c"};
 
         List l = find(sql,data);
-        return test3.render(l, reportFilter);
+        return ok(test3.render(l, "Acidentes por bairro"));
     }
 
-    private static Html accidentTypeReport(ReportFilter reportFilter){
+    private static Result accidentTypeReport(ReportFilter reportFilter){
 
         String sql = "select type, count(Id) as c " +
                 "from car_accident " +
@@ -97,14 +95,14 @@ public class Reports extends Controller{
 
         List l=find(sql,data);
 
-        return (test3.render(l,reportFilter));
+        return ok(test3.render(l, "Acidentes por Tipo"));
     }
 
-    private static Html severityReport(ReportFilter reportFilter){
+    private static Result severityReport(ReportFilter reportFilter){
 
         String sql = "SELECT severity, count(car_accident_id) as c " +
                 "from (SELECT * from car_accident " +
-                      "INNER JOIN victim on car_accident.id = victim.car_accident_id) as k " +
+                "INNER JOIN victim on car_accident.id = victim.car_accident_id) as k " +
                 "where k.date between '" +
                 reportFilter.getInitial() +"' and '"+ reportFilter.getDfinal() +
                 "' GROUP BY severity";
@@ -113,10 +111,10 @@ public class Reports extends Controller{
 
         List l = find(sql, data);
 
-        return ok(test3.render(l));
+        return ok(test3.render(l,"Acidentes por Severidade"));
     }
 
-    private static Html streetReport(ReportFilter reportFilter){
+    private static Result streetReport(ReportFilter reportFilter){
 
         String sql = "select street, count(id) as c " +
                 "from car_accident " +
@@ -128,14 +126,14 @@ public class Reports extends Controller{
 
         List l = find(sql, data);
 
-        return ok(test3.render(l));
+        return ok(test3.render(l, "Acidentes por rua"));
     }
 
-    private static Html vehicleTypeReport(ReportFilter reportFilter){
+    private static Result vehicleTypeReport(ReportFilter reportFilter){
 
         String sql = "select vehicle2.type as t, count(id) as c "+
                 "from (SELECT vehicle.type, date, vehicle.id from vehicle INNER JOIN " +
-                       "car_accident ON car_accident.id = vehicle.car_accident_id) as vehicle2 " +
+                "car_accident ON car_accident.id = vehicle.car_accident_id) as vehicle2 " +
                 "where date between '" + reportFilter.getInitial() +
                 "' and '" + reportFilter.getDfinal() +
                 "' group by t " +
@@ -145,10 +143,10 @@ public class Reports extends Controller{
 
         List l = find(sql, data);
 
-        return ok(test3.render(l));
+        return ok(test3.render(l, "Acidentes por tipo do veiculo"));
     }
 
-    private static Html genderReport(ReportFilter reportFilter){
+    private static Result genderReport(ReportFilter reportFilter){
 
         String sql = "select count(id) as c, gender " +
                 "from (SELECT victim.id, gender, date " +
@@ -164,10 +162,10 @@ public class Reports extends Controller{
 
         List l = find(sql, data);
 
-        return ok(test3.render(l));
+        return ok(test3.render(l, "Acidentes por Sexo"));
     }
 
-    private static Html ageReport(ReportFilter reportFilter){
+    private static Result ageReport(ReportFilter reportFilter){
 
         List<ReportData> l = new ArrayList<ReportData>();
 
@@ -184,7 +182,7 @@ public class Reports extends Controller{
             if(!list.isEmpty())
                 l.add(new ReportData(i + "-" + (i+5), list.get(0).getInteger("c")));
         }
-        return ok(test3.render(l));
+        return ok(test3.render(l,"Acidentes por Idade"));
     }
 
     private static Result victimStateReport(ReportFilter reportFilter, String state){
@@ -204,9 +202,9 @@ public class Reports extends Controller{
 
         for (SqlRow s : list){
             l.add(new ReportVictim(s.getString("name"),
-                                    s.getInteger("age"),
-                                    s.getString("hospital"),
-                                    s.getDate("date")));
+                    s.getInteger("age"),
+                    s.getString("hospital"),
+                    s.getDate("date")));
         }
 
         System.out.println(l);

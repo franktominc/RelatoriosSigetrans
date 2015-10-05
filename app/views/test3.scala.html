@@ -1,17 +1,16 @@
-@import models.report.ReportFilter
-
 @import models.report.ReportData
 
 @(l : List[ReportData],r :String)
-@import play.libs.Json;
+    @import play.libs.Json;
 
-@main(r){
-    <style>
+    @main(r){
+        <style>
         #chart_div{
-            height: 80%;
+        height: 80%;
         }
-    </style>
-    <div id="chart_div" class = "row" ></div>
+        </style>
+        <div id="chart_div" class = "row" ></div>
+        <div id="chart_img"></div>
         <script type="text/javascript">
         google.load('visualization', '1.0', {'packages':['corechart', 'controls']});
         google.setOnLoadCallback(drawChart);
@@ -20,41 +19,30 @@
         data.addColumn('string', 'Topping');
         data.addColumn('number', 'Slices');
         data.addRows([
-
             @l.take(l.size()-1).map{listItem =>
-
                 ['@listItem.getData', @listItem.getQuantity],
-
              }
         ]);
-
             var options = {'title':"@r",'height':500, pieHole: 0.4
             ,'sliceVisibilityThreshold':9/1000};
             var chart = new google.visualization.PieChart ( document.getElementById ( 'chart_div' ) ) ;
             chart.draw(data, options);
         }
     </script>
-    <div class="container container-fluid ">
-        <table class="table-bordered table-responsive table ">
-            <tr>
-                <th>Campo</th>
-                <th>Quantidade</th>
-            </tr>
-            @l.map{listItem =><tr>
-                <td>
-                    @listItem.getData
-                </td>
-                <td>
-                @listItem.getQuantity
-                </td>
-            </tr> }
-        </table>
-    </div>
-    <form method="post" action="/file">
-        <input type="hidden" name="initial" value="@reportfilter.getInitial()">
-        <input type="hidden" name="dfinal" value="@reportfilter.getDfinal">
-        <input type="hidden"  name="reportType" value="@reportfilter.getReportType">
-        <input type="submit">
-    </form>
-
-}
+        <div class="container container-fluid ">
+            <table class="table-bordered table-responsive table ">
+                <tr>
+                    <th>Campo</th>
+                    <th>Quantidade</th>
+                </tr>
+                @l.map{listItem =><tr>
+                    <td>
+                        @listItem.getData
+                    </td>
+                    <td>
+                    @listItem.getQuantity
+                    </td>
+                </tr> }
+            </table>
+        </div>
+    }
