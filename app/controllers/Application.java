@@ -7,10 +7,12 @@ import play.mvc.*;
 
 import views.html.*;
 
+import static views.html.ReportModel.*;
+
 public class Application extends Controller {
 
     public static Result index() {
-        return ok(Test2.render());
+        return ok(GerarRelatorio.render());
     }
 
 
