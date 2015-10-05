@@ -1,17 +1,15 @@
 package controllers;
 
 import com.avaje.ebean.*;
-
-
 import models.report.ReportData;
 import models.report.ReportFilter;
 import models.report.ReportVictim;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-import views.html.hue;
+import views.html.ReportModel;
 import views.html.index;
-import views.html.test3;
+import views.html.Relatorio;
 
 
 import java.util.*;
@@ -79,7 +77,7 @@ public class Reports extends Controller{
         String[] data = {"neighborhood","c"};
 
         List l = find(sql,data);
-        return ok(test3.render(l,"Acidentes por bairro"));
+        return ok(Relatorio.render(l,"Acidentes por bairro"));
     }
 
     private static Result accidentTypeReport(ReportFilter reportFilter){
@@ -96,7 +94,7 @@ public class Reports extends Controller{
 
         List l=find(sql,data);
 
-        return ok(test3.render(l, "Acidentes por Tipo"));
+        return ok(Relatorio.render(l, "Acidentes por Tipo"));
     }
 
     private static Result severityReport(ReportFilter reportFilter){
@@ -112,7 +110,7 @@ public class Reports extends Controller{
 
         List l = find(sql, data);
 
-        return ok(test3.render(l,"Acidentes por Severidade"));
+        return ok(Relatorio.render(l, "Acidentes por Severidade"));
     }
 
     private static Result streetReport(ReportFilter reportFilter){
@@ -127,7 +125,7 @@ public class Reports extends Controller{
 
         List l = find(sql, data);
 
-        return ok(test3.render(l, "Acidentes por rua"));
+        return ok(Relatorio.render(l, "Acidentes por rua"));
     }
 
     private static Result vehicleTypeReport(ReportFilter reportFilter){
@@ -144,7 +142,7 @@ public class Reports extends Controller{
 
         List l = find(sql, data);
 
-        return ok(test3.render(l, "Acidentes por tipo do veiculo"));
+        return ok(Relatorio.render(l, "Acidentes por tipo do veiculo"));
     }
 
     private static Result genderReport(ReportFilter reportFilter){
@@ -163,7 +161,7 @@ public class Reports extends Controller{
 
         List l = find(sql, data);
 
-        return ok(test3.render(l, "Acidentes por Sexo"));
+        return ok(Relatorio.render(l, "Acidentes por Sexo"));
     }
 
     private static Result ageReport(ReportFilter reportFilter){
@@ -183,7 +181,7 @@ public class Reports extends Controller{
             if(!list.isEmpty())
                 l.add(new ReportData(i + "-" + (i+5), list.get(0).getInteger("c")));
         }
-        return ok(test3.render(l,"Acidentes por Idade"));
+        return ok(Relatorio.render(l,"Acidentes por Idade"));
     }
 
     private static Result victimStateReport(ReportFilter reportFilter, String state){
@@ -225,7 +223,7 @@ public class Reports extends Controller{
         l.add(new ReportData("Total", S));
         return l;
     }
-    public static Result hue(){
+    public static Result ReportModel(){
         String sql = "select neighborhood,count(Id) as c " +
                 "from car_accident " +
 
@@ -237,6 +235,8 @@ public class Reports extends Controller{
 
         List l = find(sql,data);
 
-        return ok(hue.render(l));
+        return ok(ReportModel.render(l));
     }
+
+
 }

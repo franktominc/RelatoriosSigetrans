@@ -4,10 +4,36 @@
 @import play.libs.Json;
 
 @main(r){
-    <style>
-        #chart_div{
-            height: 80%;
-        }
+
+    <style type="text/css">
+
+    #chart_div {
+        height : 100 % ;
+    }
+    table {
+        page-break-inside:auto !important;
+        border:solid #000 !important;
+        border-width:1px 0 0 1px !important;
+        margin: 5px !important;
+        width:100% !important;
+    }
+    tr{
+        page-break-inside:avoid; page-break-after:always !important;
+    }
+    thead{
+        display:table-header-group;
+    }
+    tfoot{
+        display:table-footer-group;
+    }
+    th, td{ border:solid #000 !important;
+        border-width:0 1px 1px 0 !important;
+        border-collapse:collapse;
+        border: 1px solid black;
+        width:50%;
+        text-align:center !important;
+    }
+
     </style>
     <div id="chart_div" class = "row" ></div>
     <div id="chart_img"></div>
