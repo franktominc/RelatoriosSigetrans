@@ -3,76 +3,103 @@
 @(l : List[ReportData],r :String)
 @import play.libs.Json;
 
-@main(r){
+@main(r) {
 
+
+    <script type="text/javascript">
+    google.load ( 'visualization', '1.0', { 'packages' :[ 'corechart', 'controls' ] } ) ;
+    google.setOnLoadCallback ( drawChart ) ;
+    function drawChart ( ) {
+    var data = new google.visualization.DataTable ( ) ;
+    data.addColumn ( 'string', 'Topping' ) ;
+    data.addColumn ( 'number', 'Slices' ) ;
+    data.addRows ([
+
+        @l.take(l.size() - 1).map { listItem =>
+
+        [ ' @listItem.getData ',  @listItem.getQuantity ],
+
+        }
+    ] ) ;
+
+    var options = { 'title' : " @r ",'height':500, pieHole: 0.4, 'sliceVisibilityThreshold' : 9 / 1000 } ;
+    var chart = new google.visualization.PieChart ( document.getElementById ( 'chart_div' ) ) ;
+    chart.draw ( data, options ) ;
+    }
+    </script>
+
+
+    <div id="printable-area" >
     <style type="text/css">
 
     #chart_div {
-        height : 100 % ;
+        height : 100% ;
+    }
+    div{
+        width 100% !important;
     }
     table {
-        page-break-inside:auto !important;
-        border:solid #000 !important;
-        border-width:1px 0 0 1px !important;
-        margin: 5px !important;
-        width:100% !important;
+        page-break-inside : auto !important;
+        border : solid #000 !important;
+        border-width : 0px 0px 0px 0px !important;
+        margin : 1px !important;
+        width : 100% !important;
+        border-collapse:collapse !important;
     }
-    tr{
-        page-break-inside:avoid; page-break-after:always !important;
+    tr {
+        page-break-inside : avoid; page-break-after : auto !important;
     }
-    thead{
-        display:table-header-group;
+    thead {
+        display : table-header-group ;
     }
-    tfoot{
-        display:table-footer-group;
+    tfoot {
+        display : table-footer-group ;
     }
-    th, td{ border:solid #000 !important;
-        border-width:0 1px 1px 0 !important;
-        border-collapse:collapse;
-        border: 1px solid black;
-        width:50%;
-        text-align:center !important;
+    th, td {
+        border : solid #000 !important ;
+
+        border-collapse : collapse !important;
+        border : 1px solid black !important;
+        width : 50 % !important;
+        text-align : center !important ;
+        margin: 0% !important;
     }
+
 
     </style>
-    <div id="chart_div" class = "row" ></div>
-    <div id="chart_img"></div>
-    <script type="text/javascript">
-        google.load('visualization', '1.0', {'packages':['corechart', 'controls']});
-        google.setOnLoadCallback(drawChart);
-        function drawChart() {
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Topping');
-        data.addColumn('number', 'Slices');
-        data.addRows([
 
-            @l.take(l.size()-1).map{listItem =>
 
-                ['@listItem.getData', @listItem.getQuantity],
 
-             }
-        ]);
 
-            var options = {'title':"@r",'height':500, pieHole: 0.4
-            ,'sliceVisibilityThreshold':9/1000};
-            var chart = new google.visualization.PieChart ( document.getElementById ( 'chart_div' ) ) ;
-            chart.draw(data, options);
-        }
-    </script>
-    <div class="container container-fluid ">
-        <table class="table-bordered table-responsive table ">
-            <tr>
-                <th>Campo</th>
-                <th>Quantidade</th>
-            </tr>
-            @l.map{listItem =><tr>
-                <td>
-                    @listItem.getData
-                </td>
-                <td>
-                @listItem.getQuantity
-                </td>
-            </tr> }
-        </table>
+
+        <div id="chart_div" class = "row" ></div>
+        <div id="chart_img"></div>
+        <div class="container container-fluid " >
+            <table class="table" >
+                <tr>
+                    <th >
+                        Campo
+                    </th>
+                    <th >
+                        Quantidade
+                    </th>
+                </tr><!--border : solid #000 !important;border:1px solid black!important;border-width:1px 1px 1px 1px!important;
+                style="width: 100% !important; border : solid #000 !important"-->
+                @l.map { listItem => <tr >
+                    <td >
+                        @listItem.getData
+                    </td>
+                    <td >
+                    @listItem.getQuantity
+                    </td>
+                </tr>
+                }
+            </table>
+        </div>
+    </div>
+    <div class="container container-fluid">
+        <button type="button" id="print-button">
+            <span class="glyphicon glyphicon-print"></span> Imprimir
+        </button>
     </div>
 }
