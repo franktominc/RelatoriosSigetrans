@@ -101,7 +101,7 @@ public class Reports extends Controller{
 
         String sql = "SELECT severity, count(car_accident_id) as c " +
                 "from (SELECT * from car_accident " +
-                      "INNER JOIN victim on car_accident.id = victim.car_accident_id) as k " +
+                "INNER JOIN victim on car_accident.id = victim.car_accident_id) as k " +
                 "where k.date between '" +
                 reportFilter.getInitial() +"' and '"+ reportFilter.getDfinal() +
                 "' GROUP BY severity";
@@ -132,7 +132,7 @@ public class Reports extends Controller{
 
         String sql = "select vehicle2.type as t, count(id) as c "+
                 "from (SELECT vehicle.type, date, vehicle.id from vehicle INNER JOIN " +
-                       "car_accident ON car_accident.id = vehicle.car_accident_id) as vehicle2 " +
+                "car_accident ON car_accident.id = vehicle.car_accident_id) as vehicle2 " +
                 "where date between '" + reportFilter.getInitial() +
                 "' and '" + reportFilter.getDfinal() +
                 "' group by t " +
@@ -201,9 +201,9 @@ public class Reports extends Controller{
 
         for (SqlRow s : list){
             l.add(new ReportVictim(s.getString("name"),
-                                    s.getInteger("age"),
-                                    s.getString("hospital"),
-                                    s.getDate("date")));
+                    s.getInteger("age"),
+                    s.getString("hospital"),
+                    s.getDate("date")));
         }
 
         System.out.println(l);

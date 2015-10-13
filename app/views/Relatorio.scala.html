@@ -59,20 +59,20 @@
             chart.draw(data, options);
         }
     </script>
-    <div class="container container-fluid ">
-        <table class="table-bordered table-responsive table ">
-            <tr>
-                <th>Campo</th>
-                <th>Quantidade</th>
-            </tr>
-            @l.map{listItem =><tr>
-                <td>
-                    @listItem.getData
-                </td>
-                <td>
-                @listItem.getQuantity
-                </td>
-            </tr> }
-        </table>
-    </div>
-}
+        <div class="container container-fluid ">
+            <table class="table-bordered table-responsive table ">
+                <tr>
+                    <th>Campo</th>
+                    <th>Quantidade</th>
+                </tr>
+                @l.map{listItem =><tr>
+                    <td>
+                        @listItem.getData
+                    </td>
+                    <td>
+                    @listItem.getQuantity
+                    </td>
+                </tr> }
+            </table>
+        </div>
+    }
