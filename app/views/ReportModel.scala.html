@@ -25,26 +25,20 @@ height : 100 % ;
 table {
 page-break-inside:auto !important;
 border:solid #000 !important;
-border-width:1px 0 0 1px !important;
-margin: 5px !important;
+border-width:1px 1px 1px 1px !important;
+margin: 1px !important;
 width:100% !important;
 
 }
-tr    {
-    page-break-inside:avoid; page-break-after:always !important;
+tr {
+page-break-inside : avoid ; page-break-after : auto !important ;
 }
-thead {
-    display:table-header-group;
-}
-tfoot {
-    display:table-footer-group;
-}
-th, td{ border:solid #000 !important;
-        border-width:0 1px 1px 0 !important;
-        border-collapse:collapse;
-        border: 1px solid black;
-        width:50%;
-        text-align:center !important;
+th, td { border : solid #000 !important ;
+border-width : 0 1 px 1 px 0 !important ;
+border-collapse : collapse ;
+border : 1 px solid black ;
+width : 50 % ;
+text-align : center !important ;
 }
 
 </style>
@@ -52,29 +46,16 @@ th, td{ border:solid #000 !important;
 <div id="chart_div" class = "row" ></div>
 <div id="chart_img"></div>
 <script type="text/javascript">
-$ ( function ( ) {
-    $ ( "#print-button" ).on ( "click", function ( ) {
-    var table = $ ( "#table1" ),
-    tableWidth = table.outerWidth ( ),
-    pageWidth = 100%,
-    pageCount = Math.ceil ( tableWidth / pageWidth ),
-    printWrap = $ ( "<div></div>" ).insertAfter ( table ), i, printPage ;
-    for ( i = 0 ; i < pageCount ; i ++ ) {
-        printPage = $ ( "<div></div>" ).css ( {
-            "overflow" : "hidden",
-            "width" : pageWidth,
-            "page-break-inside" : "auto"
-        } ).appendTo ( printWrap ) ;
-        table.clone ( ).removeAttr ( "id" ).appendTo ( printPage ).css ( {
-            "position" : "relative",
-            "left" : - i * pageWidth
-        } ) ;
-    }
-    table.hide ( ) ;
-    $ ( this ).prop ( "disabled", true ) ;
-    } ) ;
-} ) ;
+function printDiv("printa") {
+var printContents = document.getElementById("printa").innerHTML;
+var originalContents = document.body.innerHTML;
 
+document.body.innerHTML = printContents;
+
+window.print();
+
+document.body.innerHTML = originalContents;
+}
 </script>
 <script type="text/javascript">
 google.load ( 'visualization', '1.0', { 'packages' :[ 'corechart', 'controls' ] } ) ;
@@ -98,9 +79,9 @@ var chart = new google.visualization.PieChart ( document.getElementById ( 'chart
 chart.draw ( data, options ) ;
 }
 </script>
-
-<div class="container container-fluid table">
-    <table id ="table1" class=" table " >
+<div id="printa">
+<div class="container container-fluid ">
+    <table class="table table-fluid">
         <tr>
             <th>Campo</th>
             <th>Quantidade</th>
@@ -118,4 +99,5 @@ chart.draw ( data, options ) ;
 </div>
 <div class="container container-fluid ">
     <button type="button" id="print-button">Faça a magia acontecer</button>
+</div>
 </div>
