@@ -12,6 +12,7 @@ import views.html.index;
 import views.html.Relatorio;
 
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -75,9 +76,10 @@ public class Reports extends Controller{
                 "ORDER BY count(Id) DESC";
 
         String[] data = {"neighborhood","c"};
-
+        String dateFormatted = new SimpleDateFormat("dd/MM/yyyy").format(reportFilter.getInitial()) + " - " +
+               new SimpleDateFormat("dd/MM/yyyy").format(reportFilter.getDfinal());
         List l = find(sql,data);
-        return ok(Relatorio.render(l,"Acidentes por bairro"));
+        return ok(Relatorio.render(l,"Acidentes por bairro",dateFormatted));
     }
 
     private static Result accidentTypeReport(ReportFilter reportFilter){
@@ -94,7 +96,7 @@ public class Reports extends Controller{
 
         List l=find(sql,data);
 
-        return ok(Relatorio.render(l, "Acidentes por Tipo"));
+        return ok(Relatorio.render(l, "Acidentes por Tipo",""));
     }
 
     private static Result severityReport(ReportFilter reportFilter){
@@ -110,7 +112,7 @@ public class Reports extends Controller{
 
         List l = find(sql, data);
 
-        return ok(Relatorio.render(l, "Acidentes por Severidade"));
+        return ok(Relatorio.render(l, "Acidentes por Severidade",""));
     }
 
     private static Result streetReport(ReportFilter reportFilter){
@@ -125,7 +127,7 @@ public class Reports extends Controller{
 
         List l = find(sql, data);
 
-        return ok(Relatorio.render(l, "Acidentes por rua"));
+        return ok(Relatorio.render(l, "Acidentes por rua",""));
     }
 
     private static Result vehicleTypeReport(ReportFilter reportFilter){
@@ -142,7 +144,7 @@ public class Reports extends Controller{
 
         List l = find(sql, data);
 
-        return ok(Relatorio.render(l, "Acidentes por tipo do veiculo"));
+        return ok(Relatorio.render(l, "Acidentes por tipo do veiculo",""));
     }
 
     private static Result genderReport(ReportFilter reportFilter){
@@ -161,7 +163,7 @@ public class Reports extends Controller{
 
         List l = find(sql, data);
 
-        return ok(Relatorio.render(l, "Acidentes por Sexo"));
+        return ok(Relatorio.render(l, "Acidentes por Sexo",""));
     }
 
     private static Result ageReport(ReportFilter reportFilter){
@@ -181,7 +183,7 @@ public class Reports extends Controller{
             if(!list.isEmpty())
                 l.add(new ReportData(i + "-" + (i+5), list.get(0).getInteger("c")));
         }
-        return ok(Relatorio.render(l,"Acidentes por Idade"));
+        return ok(Relatorio.render(l,"Acidentes por Idade",""));
     }
 
     private static Result victimStateReport(ReportFilter reportFilter, String state){

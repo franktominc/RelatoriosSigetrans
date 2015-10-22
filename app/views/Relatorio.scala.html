@@ -1,6 +1,6 @@
 @import models.report.ReportData
 
-@(l : List[ReportData],r :String)
+@(l : List[ReportData],r :String, date: String)
 @import play.libs.Json;
 
 @main(r) {
@@ -75,6 +75,7 @@
         <div id="chart_div" class = "row" ></div>
         <div id="chart_img"></div>
         <div class="container container-fluid " >
+            @date
             <table class="table" >
                 <tr>
                     <th >
