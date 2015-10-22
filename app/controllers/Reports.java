@@ -93,10 +93,11 @@ public class Reports extends Controller{
                 "order by count(Id) DESC";
 
         String[] data = {"type","c"};
-
+        String dateFormatted = new SimpleDateFormat("dd/MM/yyyy").format(reportFilter.getInitial()) + " - " +
+                new SimpleDateFormat("dd/MM/yyyy").format(reportFilter.getDfinal());
         List l=find(sql,data);
 
-        return ok(Relatorio.render(l, "Acidentes por Tipo",""));
+        return ok(Relatorio.render(l, "Acidentes por Tipo",dateFormatted));
     }
 
     private static Result severityReport(ReportFilter reportFilter){
@@ -109,10 +110,11 @@ public class Reports extends Controller{
                 "' GROUP BY severity";
 
         String[] data = {"severity","c"};
-
+        String dateFormatted = new SimpleDateFormat("dd/MM/yyyy").format(reportFilter.getInitial()) + " - " +
+                new SimpleDateFormat("dd/MM/yyyy").format(reportFilter.getDfinal());
         List l = find(sql, data);
 
-        return ok(Relatorio.render(l, "Acidentes por Severidade",""));
+        return ok(Relatorio.render(l, "Acidentes por Severidade", dateFormatted));
     }
 
     private static Result streetReport(ReportFilter reportFilter){
@@ -124,10 +126,11 @@ public class Reports extends Controller{
                 "' GROUP BY street ORDER BY c DESC ";
 
         String[] data = {"street","c"};
-
+        String dateFormatted = new SimpleDateFormat("dd/MM/yyyy").format(reportFilter.getInitial()) + " - " +
+                new SimpleDateFormat("dd/MM/yyyy").format(reportFilter.getDfinal());
         List l = find(sql, data);
 
-        return ok(Relatorio.render(l, "Acidentes por rua",""));
+        return ok(Relatorio.render(l, "Acidentes por rua", dateFormatted));
     }
 
     private static Result vehicleTypeReport(ReportFilter reportFilter){
@@ -141,10 +144,11 @@ public class Reports extends Controller{
                 "order by c DESC";
 
         String[] data = {"t","c"};
-
+        String dateFormatted = new SimpleDateFormat("dd/MM/yyyy").format(reportFilter.getInitial()) + " - " +
+                new SimpleDateFormat("dd/MM/yyyy").format(reportFilter.getDfinal());
         List l = find(sql, data);
 
-        return ok(Relatorio.render(l, "Acidentes por tipo do veiculo",""));
+        return ok(Relatorio.render(l, "Acidentes por tipo do veiculo",dateFormatted));
     }
 
     private static Result genderReport(ReportFilter reportFilter){
@@ -160,10 +164,11 @@ public class Reports extends Controller{
                 "order by c DESC";
 
         String[] data = {"gender","c"};
-
+        String dateFormatted = new SimpleDateFormat("dd/MM/yyyy").format(reportFilter.getInitial()) + " - " +
+                new SimpleDateFormat("dd/MM/yyyy").format(reportFilter.getDfinal());
         List l = find(sql, data);
 
-        return ok(Relatorio.render(l, "Acidentes por Sexo",""));
+        return ok(Relatorio.render(l, "Acidentes por Sexo", dateFormatted));
     }
 
     private static Result ageReport(ReportFilter reportFilter){
@@ -183,7 +188,9 @@ public class Reports extends Controller{
             if(!list.isEmpty())
                 l.add(new ReportData(i + "-" + (i+5), list.get(0).getInteger("c")));
         }
-        return ok(Relatorio.render(l,"Acidentes por Idade",""));
+        String dateFormatted = new SimpleDateFormat("dd/MM/yyyy").format(reportFilter.getInitial()) + " - " +
+                new SimpleDateFormat("dd/MM/yyyy").format(reportFilter.getDfinal());
+        return ok(Relatorio.render(l,"Acidentes por Idade",dateFormatted));
     }
 
     private static Result victimStateReport(ReportFilter reportFilter, String state){
@@ -209,6 +216,7 @@ public class Reports extends Controller{
         }
 
         System.out.println(l);
+
         return ok(index.render(""));
     }
 
