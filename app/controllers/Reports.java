@@ -54,6 +54,9 @@ public class Reports extends Controller{
                 result = victimStateReport(reportFilter,
                         "'Ferimentos considerados graves com risco à vida'");
                 break;
+            case "crossroad":
+                result = crossroadReport(reportFilter);
+                break;
         }
         return result;
     }
@@ -220,6 +223,25 @@ public class Reports extends Controller{
         return ok(index.render(""));
     }
 
+    public static Result crossroadReport(ReportFilter reportFilter){
+        String sql = "select street, crossroad, count(*) as c " +
+                "from car_accident " +
+                "where crossroad <> '' and date between '" + reportFilter.getInitial() + "' and '" +
+                reportFilter.getDfinal()+"'" +
+                " group by street, crossroad order by c desc";
+        int S = 0;
+        SqlQuery sqlQuery = Ebean.createSqlQuery(sql);
+        List<SqlRow> list = sqlQuery.findList();
+        List<ReportData> l = new ArrayList<>();
+        for(SqlRow s: list){
+            l.add(new ReportData(s.getString("street")+" x " + s.getString("crossroad"), s.getInteger("c")));
+            S+=s.getInteger("c");
+        }
+        l.add(new ReportData("Total", S));
+        String dateFormatted = new SimpleDateFormat("dd/MM/yyyy").format(reportFilter.getInitial()) + " - " +
+                new SimpleDateFormat("dd/MM/yyyy").format(reportFilter.getDfinal());
+        return ok(Relatorio.render(l,"Acidentes por Idade",dateFormatted));
+    }
     private static List find(String sql,String[] params){
         int S = 0;
         SqlQuery sqlQuery = Ebean.createSqlQuery(sql);
