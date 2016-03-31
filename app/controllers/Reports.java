@@ -4,6 +4,7 @@ import com.avaje.ebean.*;
 import models.report.ReportData;
 import models.report.ReportFilter;
 import models.report.ReportVictim;
+
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -56,6 +57,9 @@ public class Reports extends Controller{
                 break;
             case "crossroad":
                 result = crossroadReport(reportFilter);
+                break;
+            case "time":
+                result = timeReport(reportFilter);
                 break;
         }
         return result;
@@ -242,6 +246,36 @@ public class Reports extends Controller{
                 new SimpleDateFormat("dd/MM/yyyy").format(reportFilter.getDfinal());
         return ok(Relatorio.render(l,"Acidentes por Idade",dateFormatted));
     }
+
+
+    public static Result timeReport(ReportFilter reportFilter){
+        List<ReportData> l = new ArrayList<ReportData>();
+
+        String sql = "select trunc(EXTRACT(hour from date)) as h ," +
+                "count(*) as c from car_accident where date between '" +
+                reportFilter.getInitial() + "' and '" +
+                reportFilter.getDfinal() +
+                "' group by trunc(EXTRACT(hour from date)) order by c DESC";
+
+
+        SqlQuery sqlQuery = Ebean.createSqlQuery(sql);
+        List<SqlRow> list = sqlQuery.findList();
+
+        int S = 0;
+
+        for (SqlRow sqlRow : list){
+
+            Double d = Double.parseDouble(sqlRow.getString("h"));
+            Integer h = d.intValue();
+            S+=sqlRow.getInteger("c");
+            l.add(new ReportData(h + "-" + (h+1), sqlRow.getInteger("c")));
+        }
+        l.add(new ReportData("Total", S));
+        String dateFormatted = new SimpleDateFormat("dd/MM/yyyy").format(reportFilter.getInitial()) + " - " +
+                new SimpleDateFormat("dd/MM/yyyy").format(reportFilter.getDfinal());
+        return ok(Relatorio.render(l,"Acidentes por Horario",dateFormatted));
+    }
+
     private static List find(String sql,String[] params){
         int S = 0;
         SqlQuery sqlQuery = Ebean.createSqlQuery(sql);
